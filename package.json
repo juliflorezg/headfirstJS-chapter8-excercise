@@ -1,8 +1,8 @@
 {
-  "name": "08_BuildingAnApp",
+  "name": "mine",
   "version": "1.0.0",
   "description": "",
-  "main": "battleship.js",
+  "main": "script1.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
