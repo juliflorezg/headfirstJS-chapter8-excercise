@@ -28,7 +28,7 @@
         color: rgb(45, 107, 0);
         font-size: 2vw;
         /* text-shadow: 0px 0px 3px white; */
-        background-color: #fff
+        background-color: #fff;
       }
       form {
         position: absolute;
@@ -65,7 +65,7 @@
   </head>
   <body>
     <main id="board">
-      <div id="messageArea">You sank my battleship</div>
+      <div id="messageArea"></div>
       <div class="grid-container">
         <!-- first number is row, second column -->
         <!-- first row-->
@@ -125,7 +125,7 @@
         <div id="65"></div>
         <div id="66"></div>
       </div>
-      <form>
+      <form id="form">
         <input type="text" id="guessInput" placeholder="A0" />
         <input type="button" id="fireButton" value="Fire!" />
       </form>
