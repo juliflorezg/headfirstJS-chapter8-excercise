@@ -26,9 +26,9 @@ const model = {
   shipLength: 3,
   shipsSunk: 0,
   ships: [
-    { locations: ['06', '16', '26'], hits: ['', '', ''] },
-    { locations: ['24', '34', '44'], hits: ['', '', ''] },
-    { locations: ['10', '11', '12'], hits: ['', '', ''] },
+    // { locations: ['06', '16', '26'], hits: ['', '', ''] },
+    // { locations: ['24', '34', '44'], hits: ['', '', ''] },
+    // { locations: ['10', '11', '12'], hits: ['', '', ''] },
   ],
   // fire method takes an argument as string, ie: '13', '25' etc..
   fire: function (guess) {
@@ -119,19 +119,97 @@ function handleFireButton() {
   $guessInput.value = ''
 }
 
+// function handleKeyPress(e) {
+//   if (e.key === 'Enter') {
+//     e.preventDefault()
+//     // console.log('enter pressed')
+//     // $fireButton.click()
+
+//     let userGuess = $guessInput.value
+//     // and get it to the controller
+//     controller.processGuess(userGuess)
+
+//     // reset the input:
+//     $guessInput.value = ''
+//     // return false
+//   }
+// }
 function handleKeyPress(e) {
   if (e.key === 'Enter') {
     e.preventDefault()
-    // console.log('enter pressed')
-    // $fireButton.click()
+    console.log('enter pressed')
+    $fireButton.click()
 
-    let userGuess = $guessInput.value
+    // let userGuess = $guessInput.value
     // and get it to the controller
-    controller.processGuess(userGuess)
+    // controller.processGuess(userGuess)
 
     // reset the input:
-    $guessInput.value = ''
+    // $guessInput.value = ''
     // return false
+  }
+}
+
+// TODO: test to see if the new ship's location collide with any existing ship's location
+function scrambleShips() {
+  // * create an array of column an row locations based on model.boardSize
+  const boardLocations = [] // ['0','1','2','3','4','5','6']
+  for (let i = 0; i < model.boardSize; i++) {
+    boardLocations.push(i)
+  }
+  // loop for the number of ships we want to create
+  for (let s = 0; s < model.numShips; s++) {
+    model.ships[s] = { locations: [], hits: [] }
+    const direction = ['vertical', 'horizontal']
+    const randomDirection = direction[Math.floor(Math.random() * direction.length)]
+
+    let location = ''
+    const rows = [] // for vertical direction
+    const columns = [] // for horizontal direction
+
+    // loop for the number of ship locations (model.shipLength)
+    if (randomDirection === 'horizontal') {
+      let row = boardLocations[Math.floor(Math.random() * boardLocations.length)]
+      model.ships[s].direction = 'horizontal'
+      for (let l = 0; l < model.shipLength; l++) {
+        // set the column
+        //* if there's a previous value for column, set the actual as the previous + 1
+        if (columns[l - 1]) {
+          columns[l] = columns[l - 1] + 1
+        } else {
+          columns[l] =
+            boardLocations[Math.floor(Math.random() * (boardLocations.length - model.shipLength))]
+        }
+        location += String(row)
+        location += String(columns[l])
+
+        model.ships[s].locations.push(location)
+        model.ships[s].hits.push('')
+        location = ''
+      }
+    } else if (randomDirection === 'vertical') {
+      // let location = ''
+      let column = boardLocations[Math.floor(Math.random() * boardLocations.length)]
+      model.ships[s].direction = 'vertical'
+
+      for (let l = 0; l < model.shipLength; l++) {
+        // set the column
+        //* if there's a previous value for column, set the actual as the previous + 1
+        if (rows[l - 1]) {
+          rows[l] = rows[l - 1] + 1
+        } else {
+          rows[l] =
+            boardLocations[Math.floor(Math.random() * (boardLocations.length - model.shipLength))]
+        }
+        location += String(rows[l])
+        location += String(column)
+
+        model.ships[s].locations.push(location)
+        model.ships[s].hits.push('')
+        location = ''
+      }
+    }
+    console.log(randomDirection)
   }
 }
 
@@ -143,6 +221,7 @@ function handleKeyPress(e) {
 
 $fireButton.addEventListener('click', handleFireButton)
 $guessInput.addEventListener('keypress', handleKeyPress)
+document.addEventListener('DOMContentLoaded', scrambleShips)
 // $form.addEventListener('keypress', handleKeyPress)
 // $form.addEventListener('submit', handleFormSubmit)
 // view.displayMiss('00');
@@ -192,3 +271,6 @@ $guessInput.addEventListener('keypress', handleKeyPress)
 // controller.processGuess('B2') // LINE 150
 // controller.processGuess('A3')
 // controller.processGuess('G3')
+
+console.dir(model)
+console.table(model)
